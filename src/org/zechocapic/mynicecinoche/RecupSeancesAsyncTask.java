@@ -117,7 +117,6 @@ public class RecupSeancesAsyncTask extends AsyncTask<String, Void, Document>{
 			layoutBloc.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			layoutBloc.setPadding(5, 5, 5, 5);
 			layoutBloc.setOnClickListener(onClickListener);
-			layoutBloc.setTag(bloc.select("div.titre").first().select("a[href]").first().attr("href"));
 			
 			// movie title
 			Element titre = bloc.select("div.titre").first(); 
@@ -235,6 +234,38 @@ public class RecupSeancesAsyncTask extends AsyncTask<String, Void, Document>{
             layoutNotes.addView(imNoteSpectateurs);
             
             layoutBloc.addView(layoutNotes);
+            
+			// loading tag
+	        StringBuilder stringBuilder = new StringBuilder();
+	        stringBuilder.append("<html><head><title>First parse</title></head>\n");
+	        stringBuilder.append("<body>body\n");
+	        
+			// adding title to tag
+			String titreTag = bloc.select("div.titre").first().text();
+			stringBuilder.append("<div class=\"titre\">\n");
+			stringBuilder.append(titreTag + "\n");
+			stringBuilder.append("</div>\n");
+	        
+			// adding poster to tag
+			String posterTag = bloc.select("div.visuel img[src]").first().attr("src");
+			stringBuilder.append("<div class=\"poster\">\n");
+			stringBuilder.append(posterTag + "\n");
+			stringBuilder.append("</div>\n");
+	        
+	        // adding infos to tag 
+	        String infosTag = bloc.select("div.infos").first().text();
+			stringBuilder.append("<div class=\"infos\">\n");
+	        stringBuilder.append(infosTag);
+			stringBuilder.append("</div>\n");
+			
+			// adding desc to tag
+	        String descTag = bloc.select("div.description").first().text();
+			stringBuilder.append("<div class=\"desc\">\n");
+	        stringBuilder.append(descTag);
+			stringBuilder.append("</div>\n");
+	        
+	        stringBuilder.append("</body></html>");
+	        layoutBloc.setTag(stringBuilder.toString());
             layoutListeSeances.addView(layoutBloc);
 		}
 
